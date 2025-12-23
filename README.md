@@ -82,11 +82,6 @@ echo "Here is the log file you requested." | mutt -s "Server Logs" -a /path/to/f
 * **Password File:** `~/.gmail_app_password`
 * **Logs:** Logging is disabled in this configuration to avoid permission errors.
 
-Here is a clean, professional, and "copy-paste ready" **README.md** for your GitHub repository.
-
-I have included the specific sudoers configuration instructions you provided to ensure users set up the permissions correctly.
-
----
 
 # 🛡️ Jenkins Auto-Healing Monitor
 
