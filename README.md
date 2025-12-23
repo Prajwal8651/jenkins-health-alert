@@ -82,6 +82,7 @@ echo "Here is the log file you requested." | mutt -s "Server Logs" -a /path/to/f
 * **Password File:** `~/.gmail_app_password`
 * **Logs:** Logging is disabled in this configuration to avoid permission errors.
 
+<<<<<<< HEAD
 
 # 🛡️ Jenkins Auto-Healing Monitor
 
@@ -224,3 +225,8 @@ Tue Dec 23 18:31:01 IST 2025 | Alert email sent
 Tue Dec 23 18:31:12 IST 2025 | Jenkins recovered successfully
 
 ```
+=======
+## 🤝 Contributing
+
+Feel free to fork this and add features like log rotation or multi-account support!****
+>>>>>>> parent of 03df86b (Enhance README with setup and feature details)
