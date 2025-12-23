@@ -82,6 +82,150 @@ echo "Here is the log file you requested." | mutt -s "Server Logs" -a /path/to/f
 * **Password File:** `~/.gmail_app_password`
 * **Logs:** Logging is disabled in this configuration to avoid permission errors.
 
-## 🤝 Contributing
+Here is a clean, professional, and "copy-paste ready" **README.md** for your GitHub repository.
 
-Feel free to fork this and add features like log rotation or multi-account support!****
+I have included the specific sudoers configuration instructions you provided to ensure users set up the permissions correctly.
+
+---
+
+# 🛡️ Jenkins Auto-Healing Monitor
+
+A robust Bash script designed to monitor the health of your Jenkins service. It automatically detects downtime, sends alerts, and attempts to "self-heal" by restarting the service without human intervention.
+
+## ✨ Features
+
+* **Real-time Monitoring:** Checks `systemctl` status to verify if Jenkins is active.
+* **Instant Alerts:** Sends a "CRITICAL ALERT" email immediately upon failure.
+* **Auto-Healing:** Automatically attempts to restart the Jenkins service using `sudo`.
+* **Recovery Confirmation:** Sends a "RECOVERY ALERT" email once the service is back up.
+* **Logging:** Maintains a detailed history of health checks and actions in `$HOME/jenkins-health.log`.
+
+## 📋 Prerequisites
+
+* Ubuntu/Debian Linux Server
+* Jenkins installed (via `systemd`)
+* `mail` utility installed and configured (e.g., `msmtp`, `postfix`)
+
+---
+
+## 🚀 Installation & Setup
+
+### 1. Download the Script
+
+Create a directory and the script file:
+
+```bash
+mkdir -p ~/jenkins-health-alert
+nano ~/jenkins-health-alert/jenkins-health-alert.sh
+
+```
+
+*Copy and paste the script code into this file.*
+
+### 2. Make it Executable
+
+Grant execution permissions to the script:
+
+```bash
+chmod +x ~/jenkins-health-alert/jenkins-health-alert.sh
+
+```
+
+### 3. Configure Alerts
+
+Open the script and edit the `EMAILS` variable to your preferred email address:
+
+```bash
+EMAILS="your-email@example.com"
+
+```
+
+---
+
+## 🔐 Permission Configuration (Crucial)
+
+Since the script runs automatically via Cron, it needs permission to restart Jenkins without a password prompt.
+
+**1. Create a secure sudoers file:**
+
+```bash
+sudo visudo -f /etc/sudoers.d/jenkins-restart
+
+```
+
+**2. Add the following line exactly:**
+This allows the `ubuntu` user to run *only* the restart command without a password.
+
+```text
+ubuntu ALL=(ALL) NOPASSWD: /bin/systemctl restart jenkins
+
+```
+
+**3. Save and set permissions:**
+
+```bash
+# Save the file (Ctrl+O, Enter, Ctrl+X)
+# Then restrict file permissions for security:
+sudo chmod 440 /etc/sudoers.d/jenkins-restart
+
+```
+
+**4. Verify it works:**
+Run this command as your normal user. If it runs **without** asking for a password, you are ready.
+
+```bash
+sudo systemctl restart jenkins
+
+```
+
+---
+
+## ⏰ Automation (Cron Job)
+
+Set the script to run every minute to ensure maximum uptime.
+
+1. Open your crontab:
+```bash
+crontab -e
+
+```
+
+
+2. Add this line to the bottom of the file:
+```bash
+* * * * * /home/ubuntu/jenkins-health-alert/jenkins-health-alert.sh
+
+```
+
+
+
+---
+
+## 🧪 How to Test
+
+1. **Stop Jenkins manually:**
+```bash
+sudo systemctl stop jenkins
+
+```
+
+
+2. **Wait 1-2 minutes.**
+3. **Check your Email:** You should receive a "Down" alert followed shortly by a "Recovered" alert.
+4. **Check the logs:**
+```bash
+cat ~/jenkins-health.log
+
+```
+
+
+
+## 📝 Log Example
+
+```text
+Tue Dec 23 18:30:01 IST 2025 | Jenkins status: active
+Tue Dec 23 18:31:01 IST 2025 | Jenkins status: failed
+Tue Dec 23 18:31:01 IST 2025 | Alert email sent
+Tue Dec 23 18:31:12 IST 2025 | Jenkins recovered successfully
+
+```
